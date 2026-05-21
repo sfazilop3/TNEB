@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tamil Nadu EB Bill Calculator</title>
+
+  <style>
+
+    body{
+      margin:0;
+      padding:20px;
+      font-family:Arial, sans-serif;
+      background:#f3f4f6;
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:600px;
+      background:white;
+      border-radius:20px;
+      padding:25px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    h1{
+      text-align:center;
+      font-size:42px;
+      color:#0f172a;
+      margin-bottom:10px;
+      line-height:1.2;
+    }
+
+    .subtitle{
+      text-align:center;
+      color:#666;
+      font-size:18px;
+      margin-bottom:25px;
+    }
+
+    input{
+      width:100%;
+      padding:18px;
+      font-size:28px;
+      border-radius:16px;
+      border:1px solid #d1d5db;
+      box-sizing:border-box;
+      margin-bottom:20px;
+    }
+
+    button{
+      width:100%;
+      padding:18px;
+      border:none;
+      border-radius:16px;
+      background:#2563eb;
+      color:white;
+      font-size:30px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#1d4ed8;
+    }
+
+    .result{
+      margin-top:30px;
+      background:#f9fafb;
+      border-radius:20px;
+      padding:20px;
+      border:1px solid #e5e7eb;
+    }
+
+    .row{
+      padding:12px 0;
+      border-bottom:1px dashed #d1d5db;
+      font-size:20px;
+      line-height:1.5;
+    }
+
+    .row:last-child{
+      border-bottom:none;
+    }
+
+    .bill{
+      margin-top:20px;
+      line-height:1.5;
+      text-align:center;
+    }
+
+    .stamp{
+      margin-top:25px;
+      border:4px dashed red;
+      color:red;
+      padding:18px;
+      text-align:center;
+      font-size:24px;
+      font-weight:bold;
+      border-radius:16px;
+      transform:rotate(-2deg);
+    }
+
+    .note{
+      margin-top:15px;
+      text-align:center;
+      color:#666;
+      font-size:15px;
+    }
+
+    table{
+      width:100%;
+      margin-top:25px;
+      border-collapse:collapse;
+      font-size:16px;
+    }
+
+    th{
+      background:#e2e8f0;
+    }
+
+    th, td{
+      border:1px solid #cbd5e1;
+      padding:10px;
+      text-align:center;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>தமிழ்நாடு EB Bill Calculator</h1>
+
+  <div class="subtitle">
+    500 யூனிட் கீழ் Subsidy Slab Calculation
+  </div>
+
+  <input
+    type="number"
+    step="0.01"
+    id="units"
+    placeholder="எத்தனை units?"
+  />
+
+  <button onclick="calculateBill()">
+    கணக்கிடு
+  </button>
+
+  <div class="result" id="result" style="display:none;">
+
+    <div id="breakdown"></div>
+
+    <div class="bill" id="total"></div>
+
+    <div class="stamp" id="savingStamp"></div>
+
+    <table id="comparisonTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Slab</th>
+          <th>முன்பு</th>
+          <th>இப்போது</th>
+        </tr>
+      </thead>
+
+      <tbody id="comparisonBody"></tbody>
+    </table>
+
+    <div class="note">
+      * Above 500 units crossed என்றால் ₹2.35 subsidy slab remove ஆகும்.
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function calculateBill() {
+
+  const units = parseFloat(
+    document.getElementById('units').value
+  );
+
+  if (!units || units <= 0) {
+
+    alert('Valid units enter செய்யவும்');
+    return;
+  }
+
+  let total = 0;
+  let breakdown = [];
+
+  // =========================
+  // CURRENT SYSTEM CALCULATION
+  // =========================
+
+  if (units <= 500) {
+
+    if (units > 100) {
+
+      const slab2 = Math.min(units, 200) - 100;
+
+      total += slab2 * 2.35;
+
+      breakdown.push(
+        `101-200 : ${slab2.toFixed(2)} × ₹2.35 = ₹${(slab2 * 2.35).toFixed(2)}`
+      );
+    }
+
+    if (units > 200) {
+
+      const slab3 = Math.min(units, 400) - 200;
+
+      total += slab3 * 4.7;
+
+      breakdown.push(
+        `201-400 : ${slab3.toFixed(2)} × ₹4.70 = ₹${(slab3 * 4.7).toFixed(2)}`
+      );
+    }
+
+    if (units > 400) {
+
+      const slab4 = units - 400;
+
+      total += slab4 * 6.3;
+
+      breakdown.push(
+        `401-500 : ${slab4.toFixed(2)} × ₹6.30 = ₹${(slab4 * 6.3).toFixed(2)}`
+      );
+    }
+
+  }
+
+  else {
+
+    const slab2 = 300;
+
+    total += slab2 * 4.7;
+
+    breakdown.push(
+      `101-400 : ${slab2.toFixed(2)} × ₹4.70 = ₹${(slab2 * 4.7).toFixed(2)}`
+    );
+
+    const slab3 = 100;
+
+    total += slab3 * 6.3;
+
+    breakdown.push(
+      `401-500 : ${slab3.toFixed(2)} × ₹6.30 = ₹${(slab3 * 6.3).toFixed(2)}`
+    );
+
+    if (units > 500) {
+
+      const slab4 = Math.min(units, 600) - 500;
+
+      total += slab4 * 8.4;
+
+      breakdown.push(
+        `501-600 : ${slab4.toFixed(2)} × ₹8.40 = ₹${(slab4 * 8.4).toFixed(2)}`
+      );
+    }
+
+    if (units > 600) {
+
+      const slab5 = Math.min(units, 800) - 600;
+
+      total += slab5 * 9.45;
+
+      breakdown.push(
+        `601-800 : ${slab5.toFixed(2)} × ₹9.45 = ₹${(slab5 * 9.45).toFixed(2)}`
+      );
+    }
+
+    if (units > 800) {
+
+      const slab6 = Math.min(units, 1000) - 800;
+
+      total += slab6 * 10.50;
+
+      breakdown.push(
+        `801-1000 : ${slab6.toFixed(2)} × ₹10.50 = ₹${(slab6 * 10.50).toFixed(2)}`
+      );
+    }
+
+    if (units > 1000) {
+
+      const slab7 = units - 1000;
+
+      total += slab7 * 11.55;
+
+      breakdown.push(
+        `1000+ : ${slab7.toFixed(2)} × ₹11.55 = ₹${(slab7 * 11.55).toFixed(2)}`
+      );
+    }
+  }
+
+  // =========================
+  // DISPLAY BREAKDOWN
+  // =========================
+
+  document.getElementById('breakdown').innerHTML =
+    breakdown.map(item =>
+      `<div class="row">${item}</div>`
+    ).join('');
+
+  // =========================
+  // BEFORE & AFTER
+  // =========================
+
+  if (units <= 500) {
+
+    let beforeBill = total;
+    let afterBill = total;
+
+    const subsidyUnits =
+      Math.min(units, 200) - 100;
+
+    if (subsidyUnits > 0) {
+
+      afterBill =
+        total - (subsidyUnits * 2.35);
+    }
+
+    const saving =
+      beforeBill - afterBill;
+
+    document.getElementById('total').innerHTML = `
+
+      <div style="
+        font-size:26px;
+        color:#dc2626;
+        font-weight:bold;
+      ">
+        முன்பு (100 units free)
+      </div>
+
+      <div style="
+        font-size:38px;
+        color:#dc2626;
+        margin-top:5px;
+      ">
+        ₹${beforeBill.toFixed(2)}
+      </div>
+
+      <div style="
+        margin-top:20px;
+        font-size:26px;
+        color:#16a34a;
+        font-weight:bold;
+      ">
+        இப்போது (200 units free)
+      </div>
+
+      <div style="
+        font-size:42px;
+        color:#16a34a;
+        margin-top:5px;
+      ">
+        ₹${afterBill.toFixed(2)}
+      </div>
+
+    `;
+
+    document.getElementById('savingStamp').innerHTML =
+      `வெறும் ₹${saving.toFixed(2)} தான் சேமிப்பு`;
+
+    // TABLE
+
+    let comparisonRows = `
+      <tr>
+        <td>1-100</td>
+        <td>Free</td>
+        <td>Free</td>
+      </tr>
+
+      <tr>
+        <td>101-200</td>
+        <td>₹2.35</td>
+        <td>Free</td>
+      </tr>
+
+      <tr>
+        <td>201-400</td>
+        <td>₹4.70</td>
+        <td>₹4.70</td>
+      </tr>
+
+      <tr>
+        <td>401-500</td>
+        <td>₹6.30</td>
+        <td>₹6.30</td>
+      </tr>
+    `;
+
+    document.getElementById('comparisonBody').innerHTML =
+      comparisonRows;
+
+    document.getElementById('comparisonTable').style.display =
+      'table';
+
+  }
+
+  else {
+
+    document.getElementById('total').innerHTML = `
+      <div style="
+        font-size:42px;
+        color:#16a34a;
+        font-weight:bold;
+      ">
+        மொத்த Bill : ₹${total.toFixed(2)}
+      </div>
+    `;
+
+    document.getElementById('savingStamp').innerHTML =
+      `500 units மேல் subsidy கிடையாது`;
+
+    document.getElementById('comparisonTable').style.display =
+      'none';
+  }
+
+  document.getElementById('result').style.display =
+    'block';
+}
+
+</script>
+
+</body>
+</html>
