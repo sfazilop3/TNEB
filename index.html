@@ -127,7 +127,7 @@ button:hover {
 
   </div>  <script>
     function calculateBill() {
-      const units = parseInt(document.getElementById('units').value);
+      const units = parseFloat(document.getElementById('units').value);
 
       if (!units || units <= 0) {
         alert('Valid units enter செய்யவும்');
@@ -141,19 +141,19 @@ button:hover {
         if (units > 100) {
           const slab2 = Math.min(units, 200) - 100;
           total += slab2 * 2.35;
-          breakdown.push(`101-200 : ${slab2} × ₹2.35 = ₹${(slab2 * 2.35).toFixed(2)}`);
+          breakdown.push(`101-200 : ${slab2.toFixed(2)} × ₹2.35 = ₹${(slab2 * 2.35).toFixed(2)}`);
         }
 
         if (units > 200) {
           const slab3 = Math.min(units, 400) - 200;
           total += slab3 * 4.7;
-          breakdown.push(`201-400 : ${slab3} × ₹4.70 = ₹${(slab3 * 4.7).toFixed(2)}`);
+          breakdown.push(`201-400 : ${slab3.toFixed(2)} × ₹4.70 = ₹${(slab3 * 4.7).toFixed(2)}`);
         }
 
         if (units > 400) {
           const slab4 = units - 400;
           total += slab4 * 6.3;
-          breakdown.push(`401-500 : ${slab4} × ₹6.30 = ₹${(slab4 * 6.3).toFixed(2)}`);
+          breakdown.push(`401-500 : ${slab4.toFixed(2)} × ₹6.30 = ₹${(slab4 * 6.3).toFixed(2)}`);
         }
       } else {
         const slab2 = 300;
@@ -167,25 +167,25 @@ button:hover {
         if (units > 500) {
           const slab4 = Math.min(units, 600) - 500;
           total += slab4 * 8.4;
-          breakdown.push(`501-600 : ${slab4} × ₹8.40 = ₹${(slab4 * 8.4).toFixed(2)}`);
+          breakdown.push(`501-600 : ${slab4.toFixed(2)} × ₹8.40 = ₹${(slab4 * 8.4).toFixed(2)}`);
         }
 
         if (units > 600) {
           const slab5 = Math.min(units, 800) - 600;
           total += slab5 * 9.45;
-          breakdown.push(`601-800 : ${slab5} × ₹9.45 = ₹${(slab5 * 9.45).toFixed(2)}`);
+          breakdown.push(`601-800 : ${slab5.toFixed(2)} × ₹9.45 = ₹${(slab5 * 9.45).toFixed(2)}`);
         }
 
         if (units > 800) {
           const slab6 = Math.min(units, 1000) - 800;
           total += slab6 * 10.50;
-          breakdown.push(`801-1000 : ${slab6} × ₹10.50 = ₹${(slab6 * 10.50).toFixed(2)}`);
+          breakdown.push(`801-1000 : ${slab6.toFixed(2)} × ₹10.50 = ₹${(slab6 * 10.50).toFixed(2)}`);
         }
 
         if (units > 1000) {
           const slab7 = units - 1000;
           total += slab7 * 11.55;
-          breakdown.push(`1000+ : ${slab7} × ₹11.55 = ₹${(slab7 * 11.55).toFixed(2)}`);
+          breakdown.push(`1000+ : ${slab7.toFixed(2)} × ₹11.55 = ₹${(slab7 * 11.55).toFixed(2)}`);
         }
       }
 
