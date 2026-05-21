@@ -170,11 +170,7 @@ button:hover {
           breakdown.push(`501-600 : ${slab4} × ₹8.40 = ₹${(slab4 * 8.4).toFixed(2)}`);
         }
 
-        if (units > 500) {
-          const slab4 = Math.min(units, 600) - 500;
-          total += slab4 * 8.4;
-          breakdown.push(`501-600 : ${slab4} × ₹8.40 = ₹${(slab4 * 8.4).toFixed(2)}`);
-        }
+ 
 
         if (units > 600) {
           const slab5 = Math.min(units, 800) - 600;
